@@ -1,4 +1,4 @@
-FROM ubuntu:14.04
+FROM ubuntu:14.04 as base
 
 RUN apt-get update && \
     apt-get install -y git build-essential libncurses5-dev libslang2-dev gettext zlib1g-dev libselinux1-dev debhelper lsb-release pkg-config po-debconf autoconf automake autopoint libtool bison
@@ -9,4 +9,5 @@ RUN cd util-linux/ && \
     ./configure --without-python --disable-all-programs --enable-nsenter && \
     make
 
-RUN mv /util-linux/nsenter /nsenter
+FROM alpine
+COPY --from=base /util-linux/nsenter /nsenter
